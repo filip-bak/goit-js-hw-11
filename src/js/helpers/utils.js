@@ -56,7 +56,7 @@ function endOfHitsValidation() {
 
 function apiValidation(totalHits, itemsPerPage) {
   // if there is uneven total numbers of hits then render them 20 per page
-  amount = totalHits % itemsPerPage;
+  const amount = totalHits % itemsPerPage;
   if (amount) {
     return 20;
   } else {
