@@ -1,7 +1,6 @@
 import { refactoredHits, apiData } from './axios';
 import { createElement, createImg, capitalizeFirstLetter } from './utils';
 import { searchQueryValidaton, endOfHitsValidation } from './utils';
-import { renderGallery } from './ui';
 import { preventDefaultHandler } from './handlers';
 import { galleryEl } from '..';
 
@@ -45,7 +44,7 @@ export function renderPage({
   });
 }
 
-export function renderGallery({ data, renderOn } = {}) {
+function renderGallery({ data, renderOn } = {}) {
   let galleryArray = [];
   data.forEach(el => {
     galleryArray.push(photoCardElement(el));
