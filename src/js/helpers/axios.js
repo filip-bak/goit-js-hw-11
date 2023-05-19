@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-API_KEY = '36341566-f92ccb073025197e607fc0609';
+const API_KEY = '36341566-f92ccb073025197e607fc0609';
 axios.defaults.baseURL = `https://pixabay.com/api/?key=${API_KEY}`;
 
 export let apiData = {
