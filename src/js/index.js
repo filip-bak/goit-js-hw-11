@@ -1,3 +1,5 @@
+'use strict';
+
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
 import {
@@ -11,10 +13,7 @@ window.addEventListener('load', () => {
   const searchFormEl = document.querySelector('#search-form');
   galleryEl = document.querySelector('.gallery');
 
-  // loader from notiflix
-  // change stucture of files
-  // throttle the scroll eventListener
-  // wait until img loads (setTimeout())
+  // add end arrow button to go to the start of the page
 
   searchFormEl.addEventListener('submit', renderGalleryHandler);
   window.addEventListener('scroll', infiniteScrollHandler);
