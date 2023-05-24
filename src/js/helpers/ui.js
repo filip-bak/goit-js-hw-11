@@ -1,10 +1,17 @@
+import SimpleLightbox from 'simplelightbox';
+
 import { refactoredHits, apiData } from './axios';
-import { createElement, createImg, capitalizeFirstLetter } from './utils';
-import { searchQueryValidaton, endOfHitsValidation } from './utils';
+import {
+  createElement,
+  createImg,
+  capitalizeFirstLetter,
+  searchQueryValidaton,
+  endOfHitsValidation,
+  showLoader,
+  hideLoader,
+} from './utils';
 import { preventDefaultHandler } from './handlers';
 import { galleryEl } from '..';
-
-import SimpleLightbox from 'simplelightbox';
 
 let lightbox;
 
@@ -15,32 +22,38 @@ export function renderPage({
   resetPage = false,
 } = {}) {
   data.then(picture => {
-    try {
-      const hits = refactoredHits(picture.hits);
-      apiData.totalPages = picture.totalHits - 20;
+    showLoader();
+    setTimeout(() => {
+      try {
+        const hits = refactoredHits(picture.hits);
+        apiData.totalPages = picture.totalHits - 20;
 
-      if (resetPage) {
-        apiData.currentPage = 1;
-        galleryEl.innerHTML = '';
-      }
-      if (validation) {
-        searchQueryValidaton(hits.length, picture.totalHits);
-      }
-      if (hits.length === 0) {
+        if (resetPage) {
+          apiData.currentPage = 1;
+          galleryEl.innerHTML = '';
+        }
+        if (validation) {
+          searchQueryValidaton(hits.length, picture.totalHits);
+        }
+        if (hits.length === 0) {
+          endOfHitsValidation();
+          hideLoader();
+          return;
+        }
+
+        // render
+        renderGallery({ data: hits, renderOn: galleryEl });
+      } catch (error) {
         endOfHitsValidation();
-        return;
+        console.log(error);
       }
 
-      // render
-      renderGallery({ data: hits, renderOn: galleryEl });
-    } catch (error) {
-      endOfHitsValidation();
-    }
-
-    if (newLightbox) {
-      lightbox = new SimpleLightbox('.gallery a', {});
-    }
-    lightbox.refresh();
+      if (newLightbox) {
+        lightbox = new SimpleLightbox('.gallery a', {});
+      }
+      lightbox.refresh();
+      hideLoader();
+    }, 500);
   });
 }
 

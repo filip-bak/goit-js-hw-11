@@ -1,5 +1,5 @@
 import { getData, apiData } from './axios';
-import { apiValidation } from './utils';
+import { apiValidation, showLoader } from './utils';
 import { renderPage } from './ui';
 
 export function renderGalleryHandler(e) {
@@ -25,8 +25,9 @@ export function infiniteScrollHandler() {
   const searchQueryValue = document.querySelector('.search-bar').value;
   const endOfThePage =
     window.innerHeight + window.pageYOffset >= document.body.offsetHeight;
-  console.log('tik');
+
   if (endOfThePage) {
+    showLoader();
     apiData.currentPage++;
 
     apiData.itemsPerPage = apiValidation(
@@ -39,7 +40,7 @@ export function infiniteScrollHandler() {
       page: apiData.currentPage,
       per_page: apiData.itemsPerPage,
     });
-    renderPage({ data: pictures, pagination: true });
+    renderPage({ data: pictures });
   }
 }
 

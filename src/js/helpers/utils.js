@@ -1,4 +1,4 @@
-import { Notify, Loading } from 'notiflix';
+import { Notify } from 'notiflix';
 Notify.init({
   pauseOnHover: false,
   timeout: 4500,
@@ -11,6 +11,8 @@ export {
   searchQueryValidaton,
   endOfHitsValidation,
   capitalizeFirstLetter,
+  showLoader,
+  hideLoader,
 };
 
 function createElement({
@@ -62,4 +64,14 @@ function apiValidation(totalHits, itemsPerPage) {
   } else {
     return 40;
   }
+}
+
+function showLoader() {
+  const loader = document.querySelector('.loader');
+  loader.classList.add('show');
+}
+
+function hideLoader() {
+  const loader = document.querySelector('.loader');
+  loader.classList.remove('show');
 }
