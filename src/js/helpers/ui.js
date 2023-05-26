@@ -6,7 +6,6 @@ import {
   createImg,
   capitalizeFirstLetter,
   searchQueryValidaton,
-  endOfHitsValidation,
   showLoader,
   hideLoader,
 } from './utils';
@@ -23,35 +22,30 @@ export function renderPage({
 } = {}) {
   data.then(picture => {
     showLoader();
+
     setTimeout(() => {
       try {
         const hits = refactoredHits(picture.hits);
-        apiData.totalPages = picture.totalHits - 20;
 
-        if (resetPage) {
-          apiData.currentPage = 1;
-          galleryEl.innerHTML = '';
-        }
+        apiData.totalHits = picture.totalHits - 20;
+
         if (validation) {
           searchQueryValidaton(hits.length, picture.totalHits);
         }
-        if (hits.length === 0) {
-          endOfHitsValidation();
-          hideLoader();
-          return;
+
+        if (resetPage) {
+          galleryEl.innerHTML = '';
         }
 
-        // render
         renderGallery({ data: hits, renderOn: galleryEl });
-      } catch (error) {
-        endOfHitsValidation();
-        console.log(error);
-      }
 
-      if (newLightbox) {
-        lightbox = new SimpleLightbox('.gallery a', {});
-      }
-      lightbox.refresh();
+        if (newLightbox) {
+          lightbox = new SimpleLightbox('.gallery .photo-card a', {});
+        }
+
+        lightbox.refresh();
+      } catch (error) {}
+
       hideLoader();
     }, 500);
   });

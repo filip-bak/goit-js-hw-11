@@ -3,25 +3,24 @@ Notify.init({
   pauseOnHover: false,
   timeout: 4500,
 });
+import { apiData } from './axios';
 
 export {
   createElement,
   createImg,
-  apiValidation,
+  apiPerPageValidation,
   searchQueryValidaton,
   endOfHitsValidation,
+  endOfPagesValidation,
   capitalizeFirstLetter,
+  blockCardsOnRenderNewPage,
   showLoader,
   hideLoader,
+  devConsoleLog,
 };
 
-function createElement({
-  type,
-  innerText,
-  classes = [],
-  href,
-  clickHandler,
-} = {}) {
+// RENDER
+function createElement({ type, innerText, classes, href, clickHandler } = {}) {
   const elem = document.createElement(type);
   if (classes) elem.classList.add(...classes);
   if (innerText) elem.textContent = innerText;
@@ -41,6 +40,17 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+// LOADER
+function showLoader() {
+  const loader = document.querySelector('.loader');
+  loader.classList.add('show');
+}
+
+function hideLoader() {
+  const loader = document.querySelector('.loader');
+  loader.classList.remove('show');
+}
+
 // VALIDATION
 function searchQueryValidaton(numberOfHits, totalHits) {
   if (!numberOfHits) {
@@ -51,12 +61,22 @@ function searchQueryValidaton(numberOfHits, totalHits) {
   }
   Notify.success(`Hooray! We found ${totalHits} images.`);
 }
+function endOfPagesValidation(totalPages) {
+  if (apiData.currentPage > totalPages) {
+    apiData.currentPage = totalPages + 1;
+    setTimeout(() => {
+      endOfHitsValidation();
+      hideLoader();
+    }, 500);
+  }
+  return apiData.currentPage > totalPages;
+}
 
 function endOfHitsValidation() {
   Notify.info("We're sorry, but you've reached the end of search results.");
 }
 
-function apiValidation(totalHits, itemsPerPage) {
+function apiPerPageValidation(totalHits, itemsPerPage) {
   // if there is uneven total numbers of hits then render them 20 per page
   const amount = totalHits % itemsPerPage;
   if (amount) {
@@ -66,12 +86,23 @@ function apiValidation(totalHits, itemsPerPage) {
   }
 }
 
-function showLoader() {
-  const loader = document.querySelector('.loader');
-  loader.classList.add('show');
+function blockCardsOnRenderNewPage(links) {
+  const lastLinks = [...links].slice(-16);
+
+  lastLinks.forEach(el => {
+    el.classList.add('disabled');
+  });
+  setTimeout(() => {
+    lastLinks.forEach(el => {
+      el.classList.remove('disabled');
+    });
+  }, 800);
 }
 
-function hideLoader() {
-  const loader = document.querySelector('.loader');
-  loader.classList.remove('show');
+// DEV
+function devConsoleLog(totalPages = null) {
+  console.log('totalPages:', totalPages);
+  console.log('currentPage:', apiData.currentPage);
+  console.log('totalHits: ', apiData.totalHits + 20);
+  console.log('itemsPerPage: ', apiData.itemsPerPage);
 }
