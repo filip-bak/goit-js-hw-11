@@ -6,10 +6,18 @@ axios.defaults.baseURL = `https://pixabay.com/api/?key=${API_KEY}`;
 export let apiData = {
   currentPage: 1,
   itemsPerPage: 20,
-  totalPages: 0,
+  totalHits: 0,
 };
 
-export async function getData({ name, page = 1, per_page = 20 } = {}) {
+export function getTotalPages(totalHits, itemsPerPage) {
+  return Math.ceil(totalHits / itemsPerPage) + 1;
+}
+
+export async function getData({
+  name = '',
+  page = apiData.currentPage,
+  per_page = 20,
+} = {}) {
   try {
     const response = await axios.get('', {
       params: {
@@ -17,26 +25,30 @@ export async function getData({ name, page = 1, per_page = 20 } = {}) {
         image_type: 'photo',
         orientation: 'horizontal',
         safesearch: 'true',
-        per_page,
         page,
+        per_page,
       },
     });
 
     return response.data;
   } catch (error) {
-    console.log(error.response.data);
+    if (error.response === 400) {
+      return;
+    }
   }
 }
 export function refactoredHits(data) {
-  return data.map(image => {
-    return {
-      webformatURL: image.webformatURL,
-      largeImageURL: image.largeImageURL,
-      tags: image.tags,
-      likes: image.likes,
-      views: image.views,
-      comments: image.comments,
-      downloads: image.downloads,
-    };
-  });
+  if (data) {
+    return data.map(image => {
+      return {
+        webformatURL: image.webformatURL,
+        largeImageURL: image.largeImageURL,
+        tags: image.tags,
+        likes: image.likes,
+        views: image.views,
+        comments: image.comments,
+        downloads: image.downloads,
+      };
+    });
+  }
 }
