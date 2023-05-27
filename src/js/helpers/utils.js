@@ -100,7 +100,7 @@ function blockCardsOnRenderNewPage(links) {
 }
 
 // DEV
-function devConsoleLog(totalPages = null) {
+function devConsoleLog(totalPages = 0) {
   console.log('totalPages:', totalPages);
   console.log('currentPage:', apiData.currentPage);
   console.log('totalHits: ', apiData.totalHits + 20);
