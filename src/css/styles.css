@@ -126,33 +126,30 @@ a.disabled {
 /* BUTTON */
 #arrow-button {
   position: fixed;
-  bottom: 50px;
+  bottom: 65px;
   right: 15px;
 
   display: flex;
 }
 #arrow-svg {
   display: inline-block;
-  fill: hsl(230 50% 50% / 0.8);
-  fill-opacity: 0.6;
+  fill: hsl(230 50% 50% / 0.5);
   width: 52px;
-  height: 55px;
+  height: 50px;
   stroke: hsl(0 50% 50%/ 0.8);
   stroke-dasharray: 20 10 20 20;
   stroke-dashoffset: 40;
   stroke-width: 0.5px;
 
-  height: 50px;
-  transition: all 2000ms ease;
+  transition: fill 700ms, all 1500ms;
 }
 
 #arrow-button:hover #arrow-svg,
 #arrow-button:focus #arrow-svg {
-  fill: hsl(230 50% 50%);
-  fill-opacity: 1;
+  fill: hsl(230 50% 50% / 1);
   stroke-width: 0.8px;
   stroke: hsl(0 50% 50%);
   stroke-dasharray: 54;
   stroke-dashoffset: 80;
-  transition: all 1500ms ease;
+  transition: fill 700ms, all 1500ms;
 }
