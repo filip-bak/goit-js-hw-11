@@ -1,6 +1,9 @@
 'use strict';
 
 import 'simplelightbox/dist/simple-lightbox.min.css';
+import { elementsToRender, totalPages } from './helpers/handlers';
+import { endOfPagesValidation } from './helpers/utils';
+import { apiData } from './helpers/axios';
 
 import {
   renderGalleryHandler,
@@ -9,12 +12,25 @@ import {
 
 export let galleryEl;
 
+const InfiniteScroll = require('infinite-scroll');
+export let infScroll = new InfiniteScroll('.gallery', {
+  path: '.gallery',
+  append: elementsToRender,
+  history: false,
+  scrollThreshold: 100,
+});
+
 window.addEventListener('load', () => {
   const searchFormEl = document.querySelector('#search-form');
   galleryEl = document.querySelector('.gallery');
 
-  // add end arrow button to go to the start of the page
-
   searchFormEl.addEventListener('submit', renderGalleryHandler);
-  window.addEventListener('scroll', infiniteScrollHandler);
+
+  infScroll.on('load', infiniteScrollHandler);
+
+  infScroll.on('scrollThreshold', () => {
+    endOfPagesValidation(totalPages, infScroll);
+    infScroll.pageIndex = apiData.currentPage;
+    infScroll.loadCount = apiData.currentPage - 1;
+  });
 });

@@ -23,31 +23,29 @@ export function renderPage({
   data.then(picture => {
     showLoader();
 
-    setTimeout(() => {
-      try {
-        const hits = refactoredHits(picture.hits);
+    try {
+      const hits = refactoredHits(picture.hits);
 
-        apiData.totalHits = picture.totalHits - 20;
+      apiData.totalHits = picture.totalHits - 20;
 
-        if (validation) {
-          searchQueryValidaton(hits.length, picture.totalHits);
-        }
+      if (validation) {
+        searchQueryValidaton(hits.length, picture.totalHits);
+      }
 
-        if (resetPage) {
-          galleryEl.innerHTML = '';
-        }
+      if (resetPage) {
+        galleryEl.innerHTML = '';
+      }
 
-        renderGallery({ data: hits, renderOn: galleryEl });
+      renderGallery({ data: hits, renderOn: galleryEl });
 
-        if (newLightbox) {
-          lightbox = new SimpleLightbox('.gallery .photo-card a', {});
-        }
+      if (newLightbox) {
+        lightbox = new SimpleLightbox('.gallery .photo-card a', {});
+      }
 
-        lightbox.refresh();
-      } catch (error) {}
+      lightbox.refresh();
+    } catch (error) {}
 
-      hideLoader();
-    }, 500);
+    hideLoader();
   });
 }
 

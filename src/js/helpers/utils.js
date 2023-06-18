@@ -1,7 +1,8 @@
 import { Notify } from 'notiflix';
 Notify.init({
   pauseOnHover: false,
-  timeout: 4500,
+  showOnlyTheLastOne: true,
+  cssAnimationStyle: 'from-top',
 });
 import { apiData } from './axios';
 
@@ -61,15 +62,15 @@ function searchQueryValidaton(numberOfHits, totalHits) {
   }
   Notify.success(`Hooray! We found ${totalHits} images.`);
 }
-function endOfPagesValidation(totalPages) {
+function endOfPagesValidation(totalPages, infiniteScroll) {
   if (apiData.currentPage > totalPages) {
-    apiData.currentPage = totalPages + 1;
-    setTimeout(() => {
-      endOfHitsValidation();
-      hideLoader();
-    }, 500);
+    apiData.currentPage = totalPages;
+    infiniteScroll.options.scrollThreshold = 0;
+    console.log('inside endPagination');
+    endOfHitsValidation();
+    hideLoader();
   }
-  return apiData.currentPage > totalPages;
+  return;
 }
 
 function endOfHitsValidation() {

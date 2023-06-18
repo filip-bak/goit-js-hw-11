@@ -1,4 +1,8 @@
 import { getData, apiData, getTotalPages } from './axios';
+
+import { infScroll } from '..';
+export let elementsToRender;
+export let totalPages;
 import {
   apiPerPageValidation,
   endOfPagesValidation,
@@ -10,6 +14,8 @@ import { renderPage } from './ui';
 
 export function renderGalleryHandler(e) {
   e.preventDefault();
+
+  infScroll.options.scrollThreshold = 100;
 
   apiData.currentPage = 1;
   apiData.itemsPerPage = 20;
@@ -30,45 +36,29 @@ export function renderGalleryHandler(e) {
   });
 }
 
-export function infiniteScrollHandler(e) {
+export function infiniteScrollHandler() {
   const searchQueryValue = document.querySelector('.search-bar').value;
-  const endOfThePage =
-    window.innerHeight + window.pageYOffset >= document.body.offsetHeight;
 
-  const totalPages = getTotalPages(apiData.totalHits, apiData.itemsPerPage);
+  totalPages = getTotalPages(apiData.totalHits, apiData.itemsPerPage);
 
-  if (endOfThePage) {
-    showLoader();
+  apiData.currentPage++;
 
-    apiData.currentPage++;
+  apiData.itemsPerPage = apiPerPageValidation(
+    apiData.totalHits,
+    apiData.itemsPerPage
+  );
 
-    apiData.itemsPerPage = apiPerPageValidation(
-      apiData.totalHits,
-      apiData.itemsPerPage
-    );
+  const pictures = getData({
+    name: searchQueryValue,
+    page: apiData.currentPage,
+    per_page: apiData.itemsPerPage,
+  });
 
-    // Validation
-    const endOfPages = endOfPagesValidation(totalPages);
+  // Dev
+  // devConsoleLog(totalPages);
 
-    if (endOfPages) {
-      return;
-    }
-
-    blockCardsOnRenderNewPage(e.target.links);
-
-    // Dev
-    // devConsoleLog(totalPages);
-
-    // Data
-    const pictures = getData({
-      name: searchQueryValue,
-      page: apiData.currentPage,
-      per_page: apiData.itemsPerPage,
-    });
-
-    // Render
-    renderPage({ data: pictures });
-  }
+  // Render
+  elementsToRender = renderPage({ data: pictures });
 }
 
 export function preventDefaultHandler(e) {
