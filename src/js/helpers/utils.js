@@ -43,13 +43,13 @@ function capitalizeFirstLetter(string) {
 
 // LOADER
 function showLoader() {
-  const loader = document.querySelector('.loader');
-  loader.classList.add('show');
+  // const loader = document.querySelector('.loader');
+  // loader.classList.add('show');
 }
 
 function hideLoader() {
-  const loader = document.querySelector('.loader');
-  loader.classList.remove('show');
+  // const loader = document.querySelector('.loader');
+  // loader.classList.remove('show');
 }
 
 // VALIDATION
@@ -65,8 +65,6 @@ function searchQueryValidaton(numberOfHits, totalHits) {
 function endOfPagesValidation(totalPages, infiniteScroll) {
   if (apiData.currentPage > totalPages) {
     apiData.currentPage = totalPages;
-    infiniteScroll.options.scrollThreshold = 0;
-    console.log('inside endPagination');
     endOfHitsValidation();
     hideLoader();
   }

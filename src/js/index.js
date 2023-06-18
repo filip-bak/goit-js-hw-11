@@ -18,6 +18,7 @@ export let infScroll = new InfiniteScroll('.gallery', {
   append: elementsToRender,
   history: false,
   scrollThreshold: 100,
+  debug: false,
 });
 
 window.addEventListener('load', () => {
@@ -30,6 +31,7 @@ window.addEventListener('load', () => {
 
   infScroll.on('scrollThreshold', () => {
     endOfPagesValidation(totalPages, infScroll);
+
     infScroll.pageIndex = apiData.currentPage;
     infScroll.loadCount = apiData.currentPage - 1;
   });

@@ -3,13 +3,7 @@ import { getData, apiData, getTotalPages } from './axios';
 import { infScroll } from '..';
 export let elementsToRender;
 export let totalPages;
-import {
-  apiPerPageValidation,
-  endOfPagesValidation,
-  blockCardsOnRenderNewPage,
-  showLoader,
-  devConsoleLog,
-} from './utils';
+import { apiPerPageValidation, devConsoleLog } from './utils';
 import { renderPage } from './ui';
 
 export function renderGalleryHandler(e) {
@@ -57,6 +51,11 @@ export function infiniteScrollHandler() {
   // Dev
   // devConsoleLog(totalPages);
 
+  if (apiData.currentPage > totalPages) {
+    infScroll.options.scrollThreshold = 0;
+
+    return;
+  }
   // Render
   elementsToRender = renderPage({ data: pictures });
 }
