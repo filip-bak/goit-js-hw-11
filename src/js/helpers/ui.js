@@ -40,10 +40,13 @@ export function renderPage({
 
       if (newLightbox) {
         lightbox = new SimpleLightbox('.gallery .photo-card a', {});
+      } else {
+        lightbox.destroy();
+        lightbox = new SimpleLightbox('.gallery .photo-card a', {});
       }
-
-      lightbox.refresh();
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
 
     hideLoader();
   });
